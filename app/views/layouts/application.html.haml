@@ -3,7 +3,22 @@
   %head
     %title= title
     = csrf_meta_tag
+    /[if lt IE 9]
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     = stylesheet_link_tag 'blueprint/screen', :media => 'screen'
     = stylesheet_link_tag 'blueprint/print', :media => 'print'
-  %body>
-    = yield
+    /[if lt IE 8]
+      = stylesheet_link_tag 'blueprint/ie'
+    = stylesheet_link_tag 'custom', :media => 'screen'
+    
+  %body
+    .container
+      %header
+        = image_tag("logo.png", :alt => "Sample App", :class => "round")
+        %nav.round
+          %ul
+            %li= link_to "Home", "#"
+            %li= link_to "Help", "#"
+            %li= link_to "Sign in", "#"
+        %section.round
+          = yield
