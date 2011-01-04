@@ -10,6 +10,7 @@ gem 'haml'
 
 group :development do
   gem 'rspec-rails', "2.3.0"
+  gem 'annotate-models'
 end
 
 group :test do
