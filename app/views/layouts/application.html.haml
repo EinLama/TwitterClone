@@ -8,12 +8,9 @@
     .container
       = render 'layouts/header'
       %section.round
-
         - flash.each do |key, value|
-          %div{:class => ["flash", key]}
-            = value
-          
+          = content_tag(:div, value, :class => "flash #{key}")
         = yield
       = render 'layouts/footer'
-      -#= debug(params) if Rails.env.development?
+      = debug(params) if Rails.env.development?
     
