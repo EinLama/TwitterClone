@@ -1,0 +1,11 @@
+%h1 All users
+
+= will_paginate
+
+%ul.users
+  = render @users
+  / - @users.each do |user|
+  /   = render user
+
+= will_paginate
+      
