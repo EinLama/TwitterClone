@@ -151,6 +151,13 @@ describe UsersController do
       get :new
       response.should have_selector("input[name='user[password_confirmation]'][type='password']")
     end
+    
+    it "should not be accessible for signed in users" do
+      @user = Factory(:user)
+      test_sign_in @user
+      get :new
+      response.should redirect_to(root_path)
+    end
   end
   
   describe "GET 'edit'" do
@@ -257,6 +264,14 @@ describe UsersController do
         end.should change(User, :count).by(-1)
       end
       
+      it "should not allow him to destroy himself" do
+        myself = Factory(:user, :email => "admin1@example.com", :admin => true)
+        test_sign_in myself
+        lambda do
+          delete :destroy, :id => myself
+        end.should_not change(User, :count)
+      end
+      
       it "should redirect to the users page" do
         delete :destroy, :id => @user
         response.should redirect_to(users_path)
@@ -285,6 +300,15 @@ describe UsersController do
       it "should render the right page" do
         post :create, :user => @attr
         response.should render_template('new')
+      end
+    end
+    
+    context "for signed-in users" do
+      it "should redirect to the root path" do
+        @user = Factory(:user)
+        test_sign_in @user
+        post :create, :user => @attr
+        response.should redirect_to(root_path)
       end
     end
     

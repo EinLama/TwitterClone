@@ -14,11 +14,21 @@ class UsersController < ApplicationController
   end
 
   def new
+    unless current_user.nil?
+      redirect_to(root_path)
+      return
+    end
+    
     @user = User.new
     @title = 'Sign Up'
   end
   
   def create
+    unless current_user.nil?
+      redirect_to(root_path) 
+      return
+    end
+  
     @user = User.new(params[:user])
     if @user.save
       sign_in @user
@@ -47,8 +57,15 @@ class UsersController < ApplicationController
   end
   
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
+    user_to_delete = User.find(params[:id])
+    
+    if user_to_delete == current_user
+      flash.alert = "You may not delete yourself."
+    else
+      user_to_delete.destroy
+      flash[:success] = "User destroyed."
+    end
+    
     redirect_to users_path
   end
   
