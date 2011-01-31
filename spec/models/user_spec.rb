@@ -143,4 +143,32 @@ describe User do
       @user.should be_admin
     end
   end
+  
+  context "micropost associations" do
+    before(:each) do
+      @user = User.create(@attr)
+      @micropost1 = Factory(:micropost, :user => @user, :created_at => 1.day.ago)
+      @micropost2 = Factory(:micropost, :user => @user, :created_at => 1.hour.ago)
+    end
+    
+    it "should have a microposts attribute" do
+      @user.should respond_to(:microposts)
+    end
+    
+    it "should have the right microposts in the right order" do
+      @user.microposts.should == [@micropost2, @micropost1]
+    end
+    
+    it "should destroy associated microposts on death" do
+      @user.destroy
+      [@micropost1, @micropost2].each do |post|
+        Micropost.find_by_id(post.id).should be_nil
+        
+        # Test the above using exceptions:
+        #lambda do
+        #  Micropost.find(post.id)
+        #end.should raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
