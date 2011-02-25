@@ -6,6 +6,8 @@
         = gravatar_for @user
         = @user.name
         
+      = render 'follow_form' if signed_in?
+        
       - unless @user.microposts.empty?
         %table.microposts{ :summary => "User microposts" }
           = render @microposts
@@ -19,3 +21,4 @@
       %br
       %strong Microposts
       = @user.microposts.count
+      = render 'shared/stats'
