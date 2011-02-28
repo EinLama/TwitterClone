@@ -1,0 +1,6 @@
+# Twitter Clone
+
+Just a simple twitter clone based on the [RailsTutorial](http://railstutorial.org) by Michael Hartl. 
+
+It's a great resource and I can highly recommend it for everyone who is interested in Ruby on Rails.
+
